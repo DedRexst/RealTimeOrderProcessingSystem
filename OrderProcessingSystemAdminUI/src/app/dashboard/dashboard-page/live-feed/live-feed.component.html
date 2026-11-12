@@ -1,0 +1,34 @@
+<div class="card-x">
+  <div class="card-x__header">
+    <div><h2>Live activity</h2><span class="hint">Order status changes from the <span class="mono">orders.status-changed</span> topic</span></div>
+    <span class="chip">{{ events.length }} events</span>
+  </div>
+  <div class="card-x__body card-x__body--flush">
+    <ul class="feed" *ngIf="events.length; else empty">
+      <li *ngFor="let e of events | slice: 0 : limit; trackBy: trackByKey" class="feed-item">
+        <span class="dot status-bg-{{ e.newStatus.toLowerCase() }}"></span>
+        <div class="main">
+          <div class="line1">
+            <a [routerLink]="['/orders', e.orderId]" class="order-link">Order #{{ e.orderId }}</a>
+            <span class="trans">
+              <app-status-badge *ngIf="e.previousStatus" [status]="e.previousStatus"></app-status-badge>
+              <i class="bi bi-arrow-right" *ngIf="e.previousStatus"></i>
+              <app-status-badge [status]="e.newStatus"></app-status-badge>
+            </span>
+          </div>
+          <div class="line2">
+            <span *ngIf="e.reason"><i class="bi bi-chat-left-quote"></i> {{ e.reason }}</span>
+            <span *ngIf="e.changedBy"><i class="bi bi-person"></i> {{ e.changedBy }}</span>
+            <span *ngIf="e.externalReference" class="mono"><i class="bi bi-link-45deg"></i> {{ e.externalReference }}</span>
+            <span *ngIf="e.currency" class="mono">{{ e.currency }}</span>
+          </div>
+        </div>
+        <time class="when" [attr.datetime]="e.occurredAt" [title]="e.occurredAt | date: 'medium'">{{ e.occurredAt | timeAgo }}</time>
+      </li>
+    </ul>
+    <ng-template #empty>
+      <div class="empty-state"><i class="bi bi-broadcast"></i><strong>Waiting for events</strong>
+        <small>Status changes stream here in real time.</small></div>
+    </ng-template>
+  </div>
+</div>

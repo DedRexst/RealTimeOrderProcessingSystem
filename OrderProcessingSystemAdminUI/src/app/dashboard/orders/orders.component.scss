@@ -1,0 +1,28 @@
+@use 'tokens' as *;
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+  border-bottom: 1px solid $border;
+}
+.toolbar-right { display: flex; align-items: center; gap: 8px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+.select-icon {
+  position: relative;
+  .bi { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: $text-subtle; font-size: .85rem; pointer-events: none; }
+  .form-select { padding-left: 30px; min-width: 200px; }
+}
+.cust { display: flex; align-items: center; gap: 10px; font-weight: 500; white-space: nowrap; }
+.cust-avatar {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: $accent-soft; color: $accent;
+  font-weight: 700; font-size: .78rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  text-transform: uppercase;
+}
+.chips { display: flex; gap: 4px; flex-wrap: nowrap; }
+.addr { display: inline-block; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: $text-muted; vertical-align: middle; }

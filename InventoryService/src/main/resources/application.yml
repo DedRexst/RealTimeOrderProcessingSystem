@@ -1,0 +1,48 @@
+server:
+  port: 8083
+
+spring:
+  application.name: OrderService
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.value.default.type: "com.project.inventoryservice.event.OrderCreatedEvent"
+        isolation.level: read_committed
+      group-id: order-consumer-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      max-poll-records: 50
+    listener:
+      ack-mode: MANUAL
+      concurrency: 3
+      missing-topics-fatal: false
+
+kafka:
+  topics:
+    inventory-reserved: inventory.reserved
+    orders-created: orders.created
+    orders-dlq: orders.dlq
+    products-created: products.created

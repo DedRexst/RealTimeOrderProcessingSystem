@@ -1,0 +1,28 @@
+<aside class="sidebar" [class.mini]="collapsed">
+  <a class="brand" routerLink="/dashboard">
+    <img src="assets/img/logo.svg" alt="" width="32" height="32">
+    <span class="brand__text">OrderFlow <small>Admin</small></span>
+  </a>
+
+  <nav class="nav-section" aria-label="Main">
+    <span class="nav-heading">Operations</span>
+    <a *ngFor="let item of main" class="nav-link-x" [routerLink]="item.link" routerLinkActive="active"
+       [tooltip]="collapsed ? item.label : ''" placement="right" container="body">
+      <i class="bi {{ item.icon }}"></i><span>{{ item.label }}</span>
+    </a>
+  </nav>
+
+  <nav class="nav-section" aria-label="Administration" *ngIf="auth.isAdmin()">
+    <span class="nav-heading">Administration</span>
+    <a *ngFor="let item of admin" class="nav-link-x" [routerLink]="item.link" routerLinkActive="active"
+       [tooltip]="collapsed ? item.label : ''" placement="right" container="body">
+      <i class="bi {{ item.icon }}"></i><span>{{ item.label }}</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-foot">
+    <div class="pipeline" *ngIf="!collapsed">
+      <span>Order</span><i class="bi bi-arrow-right"></i><span>Kafka</span><i class="bi bi-arrow-right"></i><span>Inventory</span>
+    </div>
+  </div>
+</aside>

@@ -1,0 +1,3 @@
+# RSA keypair for AuthService JWT signing — generated locally, never commit
+**/data/auth-keys/
+*.pem

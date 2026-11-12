@@ -1,0 +1,83 @@
+<div class="modal-header">
+  <h4 class="modal-title"><i class="bi bi-plus-circle me-2 text-primary"></i>New order</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="modalRef.hide()"></button>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <div class="modal-body">
+    <div class="alert-x danger mb-3" *ngIf="catalogError"><i class="bi bi-exclamation-triangle"></i><span>Could not load the catalog: {{ catalogError }}</span></div>
+    <div class="alert-x danger mb-3" *ngIf="error"><i class="bi bi-exclamation-circle"></i><span>{{ error }}</span></div>
+
+    <div class="row g-3">
+      <div class="col-md-7">
+        <label class="form-label" for="customer">Customer</label>
+        <select id="customer" class="form-select" [class.is-invalid]="invalid('customerId')"
+                [disabled]="loadingCatalog" (change)="onCustomerChange($any($event.target).value)">
+          <option value="">{{ loadingCatalog ? 'Loading…' : 'Select a customer' }}</option>
+          <option *ngFor="let c of customers" [value]="c.id">{{ c.name }} · #{{ c.id }}</option>
+        </select>
+        <div class="invalid-feedback">Choose a customer.</div>
+      </div>
+      <div class="col-md-5">
+        <span class="form-label d-block">Currency</span>
+        <div class="segmented w-100" role="radiogroup" aria-label="Currency">
+          <button type="button" *ngFor="let c of currencies" class="flex-fill justify-content-center"
+                  role="radio" [attr.aria-checked]="form.controls.currency.value === c"
+                  [class.active]="form.controls.currency.value === c" (click)="setCurrency(c)">{{ c }}</button>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label" for="address">Shipping address</label>
+        <textarea id="address" rows="2" class="form-control" formControlName="address"
+                  placeholder="Street, city, postal code" [class.is-invalid]="invalid('address')"></textarea>
+        <div class="invalid-feedback">Address is required.</div>
+        <div class="form-text">Pre-filled from the customer profile. You can override it.</div>
+      </div>
+
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-end mb-2">
+          <span class="form-label mb-0">Products <span class="text-muted-x fw-normal">({{ selectedIds.length }} selected)</span></span>
+          <div class="search-sm">
+            <i class="bi bi-search"></i>
+            <input type="search" class="form-control form-control-sm" placeholder="Search products"
+                   aria-label="Search products" [value]="productSearch" (input)="productSearch = $any($event.target).value">
+          </div>
+        </div>
+
+        <div class="selected-chips" *ngIf="selectedIds.length">
+          <span class="chip chip-accent" *ngFor="let id of selectedIds">
+            {{ productById(id)?.name ?? ('#' + id) }}
+            <button type="button" (click)="toggleProduct(id)" [attr.aria-label]="'Remove product ' + id"><i class="bi bi-x"></i></button>
+          </span>
+        </div>
+
+        <div class="product-grid" [class.is-invalid]="invalid('productIds')">
+          <ng-container *ngIf="loadingCatalog">
+            <div class="product-card" *ngFor="let _ of [1, 2, 3, 4]"><span class="skeleton w-75"></span><span class="skeleton w-50 mt-2"></span></div>
+          </ng-container>
+          <button type="button" class="product-card" *ngFor="let p of filteredProducts"
+                  [class.selected]="selectedIds.includes(p.id)" (click)="toggleProduct(p.id)"
+                  [attr.aria-pressed]="selectedIds.includes(p.id)">
+            <span class="check"><i class="bi bi-check-lg"></i></span>
+            <span class="name">{{ p.name }}</span>
+            <span class="desc">{{ p.description || 'No description' }}</span>
+            <span class="pid mono">#{{ p.id }}</span>
+          </button>
+          <div class="empty-state w-100" *ngIf="!loadingCatalog && !filteredProducts.length" style="grid-column: 1 / -1">
+            <i class="bi bi-search"></i><small>No products match "{{ productSearch }}"</small>
+          </div>
+        </div>
+        <div class="invalid-msg" *ngIf="invalid('productIds')">Select at least one product.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <span class="me-auto text-muted-x small"><i class="bi bi-info-circle"></i> Orders start as <strong>Pending</strong> until inventory is reserved.</span>
+    <button type="button" class="btn btn-soft" (click)="modalRef.hide()">Cancel</button>
+    <button type="submit" class="btn btn-primary" [disabled]="submitting || loadingCatalog">
+      <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2"></span>Create order
+    </button>
+  </div>
+</form>

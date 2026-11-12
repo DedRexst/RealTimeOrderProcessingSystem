@@ -1,0 +1,35 @@
+<header class="topbar">
+  <div class="progress-line" [class.on]="loading$ | async"></div>
+  <button type="button" class="icon-btn" aria-label="Toggle sidebar" (click)="toggleSidebar.emit()">
+    <i class="bi bi-layout-sidebar"></i>
+  </button>
+  <div class="crumb">{{ title$ | async }}</div>
+
+  <div class="topbar-right">
+    <ng-container *ngIf="socketStatus$ | async as status">
+      <button type="button" class="ws-pill ws-{{ status }}" (click)="reconnect()"
+              [tooltip]="status === 'live' ? 'Streaming from AnalyticsService' : 'Click to reconnect to the analytics stream'"
+              placement="bottom">
+        <span class="pulse-dot" [class.animate]="status === 'live'"></span>
+        <span class="label">{{ status === 'live' ? 'Live' : status === 'connecting' ? 'Connecting…' : 'Offline' }}</span>
+        <span class="since" *ngIf="status === 'live' && (lastMessageAt$ | async) as at">· {{ at | timeAgo }}</span>
+      </button>
+    </ng-container>
+
+    <div class="btn-group" dropdown placement="bottom right">
+      <button dropdownToggle type="button" class="user-btn" aria-controls="user-menu">
+        <span class="avatar">{{ initials }}</span>
+        <span class="who">
+          <span class="email">{{ auth.email }}</span>
+          <span class="role">{{ auth.isAdmin() ? 'Administrator' : 'Operator' }}</span>
+        </span>
+        <i class="bi bi-chevron-down"></i>
+      </button>
+      <ul id="user-menu" *dropdownMenu class="dropdown-menu dropdown-menu-end" role="menu">
+        <li role="menuitem"><a class="dropdown-item" routerLink="/profile"><i class="bi bi-person"></i> Profile</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li role="menuitem"><button type="button" class="dropdown-item text-danger" (click)="signOut()"><i class="bi bi-box-arrow-right"></i> Sign out</button></li>
+      </ul>
+    </div>
+  </div>
+</header>

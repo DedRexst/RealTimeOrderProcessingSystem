@@ -1,0 +1,8 @@
+<div class="app-shell" [class.sidebar-collapsed]="collapsed" [class.sidebar-mobile-open]="mobileOpen">
+  <app-navbar [collapsed]="collapsed"></app-navbar>
+  <div class="sidebar-scrim" *ngIf="mobileOpen" (click)="mobileOpen = false"></div>
+  <div class="app-main">
+    <app-topbar (toggleSidebar)="toggleSidebar()"></app-topbar>
+    <router-outlet></router-outlet>
+  </div>
+</div>

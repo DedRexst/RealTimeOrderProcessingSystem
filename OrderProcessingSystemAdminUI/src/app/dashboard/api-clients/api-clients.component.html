@@ -1,0 +1,70 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>API clients</h1>
+      <p class="subtitle">OAuth2 client-credentials apps that integrate with the platform (e.g. carrier status callbacks).</p>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn-soft btn-icon" (click)="load()"><i class="bi bi-arrow-clockwise"></i></button>
+      <button type="button" class="btn btn-primary btn-icon" (click)="register()"><i class="bi bi-plus-lg"></i> Register client</button>
+    </div>
+  </div>
+
+  <div class="summary mb-4" *ngIf="!loading && clients.length">
+    <div><strong>{{ clients.length }}</strong><span>clients</span></div>
+    <div><strong class="text-success">{{ enabledCount }}</strong><span>enabled</span></div>
+    <div><strong class="text-muted-x">{{ clients.length - enabledCount }}</strong><span>disabled</span></div>
+  </div>
+
+  <div class="alert-x danger mb-3" *ngIf="error"><i class="bi bi-exclamation-triangle"></i><span>{{ error }}</span></div>
+
+  <div class="card-x">
+    <div class="table-scroll">
+      <table class="table-x">
+        <thead><tr><th>Client</th><th>Client ID</th><th>Scopes</th><th class="d-none d-lg-table-cell">Secret rotated</th><th>Enabled</th><th class="text-end">Actions</th></tr></thead>
+        <tbody>
+        <ng-container *ngIf="loading"><tr *ngFor="let _ of [1,2,3]"><td *ngFor="let __ of [1,2,3,4,5,6]"><span class="skeleton"></span></td></tr></ng-container>
+        <tr *ngFor="let c of clients" [class.disabled-row]="!c.enabled">
+          <td>
+            <div class="fw-600">{{ c.name }}</div>
+            <div class="small text-muted-x">{{ c.description || c.contactEmail || '—' }}</div>
+          </td>
+          <td>
+            <button type="button" class="id-btn mono" (click)="copy(c.clientId)" tooltip="Copy client ID">{{ c.clientId }} <i class="bi bi-copy"></i></button>
+          </td>
+          <td><div class="d-flex flex-wrap gap-1"><span class="chip chip-accent mono" *ngFor="let s of c.scopes">{{ s }}</span></div></td>
+          <td class="d-none d-lg-table-cell text-muted-x" [title]="c.secretRotatedAt | date: 'medium'">{{ c.secretRotatedAt | timeAgo }}</td>
+          <td>
+            <div class="form-check form-switch m-0">
+              <input class="form-check-input" type="checkbox" role="switch" [checked]="c.enabled"
+                     [disabled]="busy.has(c.clientId)" (change)="toggle(c)" [attr.aria-label]="'Enable ' + c.name">
+            </div>
+          </td>
+          <td class="text-end text-nowrap">
+            <ng-container *ngIf="confirmRotate !== c.clientId; else confirm">
+              <button type="button" class="btn btn-sm btn-soft" [disabled]="busy.has(c.clientId)" (click)="confirmRotate = c.clientId">
+                <i class="bi bi-arrow-repeat"></i> Rotate secret
+              </button>
+            </ng-container>
+            <ng-template #confirm>
+              <span class="small text-danger me-2">Old secret stops working immediately.</span>
+              <button type="button" class="btn btn-sm btn-danger me-1" (click)="rotate(c)">Rotate</button>
+              <button type="button" class="btn btn-sm btn-soft" (click)="confirmRotate = null">Cancel</button>
+            </ng-template>
+          </td>
+        </tr>
+        <tr *ngIf="!loading && !clients.length && !error">
+          <td colspan="6">
+            <div class="empty-state" style="padding:48px 16px">
+              <i class="bi bi-key"></i>
+              <strong>No API clients yet</strong>
+              <small>Register a client to let external systems post order status callbacks.</small>
+              <div class="mt-3"><button type="button" class="btn btn-primary btn-sm" (click)="register()">Register client</button></div>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

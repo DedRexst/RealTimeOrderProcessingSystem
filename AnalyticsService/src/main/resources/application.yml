@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: AnalyticsService
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: analytics-service-status-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.project.analyticsservice.event
+        spring.json.value.default.type: com.project.analyticsservice.event.OrderStatusChangedEvent
+        isolation.level: read_committed
+    listener:
+      ack-mode: MANUAL
+      missing-topics-fatal: false
+
+server:
+  port: 8084
+
+kafka:
+  schema-registry-url: http://localhost:8081
+  topics:
+    orders-created: orders.created
+    orders-status-changed: orders.status-changed
+    orders-stats: orders.stats
+    orders-windowed-count: orders.windowed-count
+
+analytics:
+  websocket:
+    allowed-origins: http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173
+
+webhook:
+  url: ""

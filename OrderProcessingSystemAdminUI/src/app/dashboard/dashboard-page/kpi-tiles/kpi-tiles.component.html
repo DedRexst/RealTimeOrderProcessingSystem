@@ -1,0 +1,18 @@
+<div class="kpis">
+  <div class="kpi tone-{{ t.tone }}" *ngFor="let t of tiles; trackBy: trackByLabel">
+    <div class="kpi__top">
+      <span class="kpi__label">{{ t.label }}</span>
+      <span class="kpi__icon"><i class="bi {{ t.icon }}"></i></span>
+    </div>
+    <div class="kpi__value">{{ t.value }}</div>
+    <div class="kpi__bottom">
+      <span class="kpi__delta" *ngIf="t.delta" [class.up]="t.delta.up" [class.down]="!t.delta.up">
+        <i class="bi" [class.bi-arrow-up-right]="t.delta.up" [class.bi-arrow-down-right]="!t.delta.up"></i>{{ t.delta.text }}
+      </span>
+      <span class="kpi__hint">{{ t.hint }}</span>
+    </div>
+    <svg *ngIf="t.spark" class="kpi__spark" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true">
+      <path [attr.d]="t.spark" fill="none" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+    </svg>
+  </div>
+</div>

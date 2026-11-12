@@ -1,0 +1,21 @@
+{
+  "type": "record",
+  "name": "CustomerOrderStats",
+  "namespace": "com.project.analyticsservice.avro",
+  "aliases": ["analyticsservice.avro.CustomerOrderStats"],
+  "doc": "Aggregated order statistics per customer, stored in the customer-order-stats-store state store.",
+  "fields": [
+    {
+      "name": "orderCount",
+      "type": "long",
+      "default": 0,
+      "doc": "Total number of orders placed by this customer."
+    },
+    {
+      "name": "productCount",
+      "type": "long",
+      "default": 0,
+      "doc": "Total number of individual products ordered by this customer."
+    }
+  ]
+}

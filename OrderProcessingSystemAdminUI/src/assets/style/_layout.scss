@@ -1,0 +1,64 @@
+@use 'tokens' as *;
+
+html, body { height: 100%; }
+body {
+  background: $canvas;
+  color: $text;
+  font-family: $font-sans;
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-shell { display: flex; min-height: 100vh; }
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  margin-left: $sidebar-w;
+  transition: margin-left .2s ease;
+  .sidebar-collapsed & { margin-left: $sidebar-w-mini; }
+  @media (max-width: 991.98px) { margin-left: 0 !important; }
+}
+
+.page {
+  padding: 28px 32px 48px;
+  max-width: 1480px;
+  margin: 0 auto;
+  @media (max-width: 767.98px) { padding: 20px 16px 40px; }
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+
+  h1 { font-size: 1.55rem; font-weight: 700; letter-spacing: -.02em; margin: 0; }
+  .subtitle { color: $text-muted; margin: 4px 0 0; font-size: .925rem; }
+  .actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+}
+
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 20px;
+  > * { grid-column: span 12; }
+  @media (min-width: 1200px) {
+    .span-8 { grid-column: span 8; }
+    .span-6 { grid-column: span 6; }
+    .span-4 { grid-column: span 4; }
+  }
+  @media (min-width: 768px) and (max-width: 1199.98px) {
+    .span-4, .span-6 { grid-column: span 6; }
+  }
+}
+
+.sidebar-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, .45);
+  z-index: 1035;
+  @media (min-width: 992px) { display: none; }
+}

@@ -1,0 +1,4 @@
+rootProject.name = 'KafkaProject'
+
+includeBuild 'AuthService'
+includeBuild 'OrderService'

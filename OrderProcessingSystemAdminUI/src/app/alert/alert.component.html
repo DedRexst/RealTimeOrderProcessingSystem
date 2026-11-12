@@ -1,0 +1,13 @@
+<div class="toast-stack" aria-live="polite">
+  <div *ngFor="let alert of alerts; trackBy: trackByUid"
+       class="toast-x {{ cssClass(alert) }}" [class.leaving]="alert.leaving" role="status">
+    <i class="bi {{ icon(alert) }} toast-x__icon"></i>
+    <div class="toast-x__body">
+      <strong *ngIf="alert.title">{{ alert.title }}</strong>
+      <span>{{ alert.message }}</span>
+    </div>
+    <button type="button" class="toast-x__close" aria-label="Dismiss" (click)="remove(alert)">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+</div>

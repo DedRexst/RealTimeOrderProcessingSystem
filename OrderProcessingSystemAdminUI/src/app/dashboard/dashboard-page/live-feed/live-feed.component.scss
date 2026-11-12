@@ -1,0 +1,22 @@
+@use 'tokens' as *;
+
+.feed { list-style: none; margin: 0; padding: 0; }
+.feed-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 13px 20px;
+  border-bottom: 1px solid #eef1f6;
+  animation: feed-in .45s ease;
+  &:last-child { border-bottom: 0; }
+  &:hover { background: #fafbff; }
+}
+@keyframes feed-in { from { opacity: 0; transform: translateY(-6px); background: #eef2ff; } to { opacity: 1; transform: none; } }
+.dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 6px; box-shadow: 0 0 0 4px #f1f5f9; flex-shrink: 0; }
+.main { flex: 1; min-width: 0; }
+.line1 { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.order-link { font-weight: 600; color: $text; text-decoration: none; &:hover { color: $accent; } }
+.trans { display: inline-flex; align-items: center; gap: 6px; .bi { color: $text-subtle; font-size: .8rem; } }
+.line2 { display: flex; gap: 16px; flex-wrap: wrap; font-size: .8rem; color: $text-muted; margin-top: 4px;
+  .bi { color: $text-subtle; } }
+.when { font-size: .78rem; color: $text-subtle; white-space: nowrap; margin-top: 2px; }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AnalyticsService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/AnalyticsService.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AnalyticsService.test.iml" filepath="$PROJECT_DIR$/.idea/modules/AnalyticsService.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AuthService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/AuthService.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AuthService.test.iml" filepath="$PROJECT_DIR$/.idea/modules/AuthService.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/InventoryService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/InventoryService.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OrderProcessingSystemAdminUI/OrderProcessingSystemAdminUI.iml" filepath="$PROJECT_DIR$/OrderProcessingSystemAdminUI/OrderProcessingSystemAdminUI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/OrderService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/OrderService.main.iml" />
+    </modules>
+  </component>
+</project>

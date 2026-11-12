@@ -1,0 +1,67 @@
+<div class="signin">
+  <section class="hero" aria-hidden="true">
+    <div class="hero__brand">
+      <img src="assets/img/logo.svg" alt="" width="36" height="36">
+      <span>OrderFlow</span>
+    </div>
+    <div class="hero__copy">
+      <h2>Every order, every event,<br>in one place.</h2>
+      <p>Monitor the event-driven order pipeline in real time, manage order lifecycles and control API access.</p>
+    </div>
+
+    <div class="flow">
+      <div class="node"><i class="bi bi-receipt"></i><span>Order</span></div>
+      <div class="edge"><span class="packet"></span></div>
+      <div class="node kafka"><i class="bi bi-diagram-3"></i><span>Kafka</span></div>
+      <div class="edge"><span class="packet d2"></span></div>
+      <div class="node"><i class="bi bi-box-seam"></i><span>Inventory</span></div>
+      <div class="edge"><span class="packet d3"></span></div>
+      <div class="node"><i class="bi bi-graph-up-arrow"></i><span>Analytics</span></div>
+    </div>
+
+    <div class="hero__foot">Kafka · Kafka Streams · Avro · Spring Boot</div>
+  </section>
+
+  <main class="panel">
+    <form class="form-card" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <h1>Welcome back</h1>
+      <p class="lead-x">Sign in to the admin console</p>
+
+      <div class="alert-x danger mb-3" *ngIf="error" role="alert">
+        <i class="bi bi-exclamation-circle"></i><span>{{ error }}</span>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="email">Email</label>
+        <div class="input-icon">
+          <i class="bi bi-envelope"></i>
+          <input id="email" type="email" class="form-control form-control-lg" formControlName="email"
+                 autocomplete="username" placeholder="admin@example.com" [class.is-invalid]="invalid('email')">
+        </div>
+        <div class="invalid-msg" *ngIf="invalid('email')">Enter a valid email address.</div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label" for="password">Password</label>
+        <div class="input-icon">
+          <i class="bi bi-lock"></i>
+          <input id="password" [type]="showPassword ? 'text' : 'password'" class="form-control form-control-lg"
+                 formControlName="password" autocomplete="current-password" placeholder="••••••••••"
+                 [class.is-invalid]="invalid('password')">
+          <button type="button" class="reveal" (click)="showPassword = !showPassword"
+                  [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+            <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+          </button>
+        </div>
+        <div class="invalid-msg" *ngIf="invalid('password')">Password is required.</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="submitting">
+        <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2" role="status"></span>
+        {{ submitting ? 'Signing in…' : 'Sign in' }}
+      </button>
+
+      <p class="foot-note"><i class="bi bi-shield-check"></i> Secured by AuthService · RS256 JWT</p>
+    </form>
+  </main>
+</div>

@@ -1,0 +1,47 @@
+// Design tokens shared by SCSS and (via CSS variables) by charts.
+$font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+$font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+$canvas: #f4f6fb;
+$surface: #ffffff;
+$border: #e6e9f2;
+$text: #0f172a;
+$text-muted: #64748b;
+$text-subtle: #94a3b8;
+
+$sidebar-bg: #0f172a;
+$sidebar-bg-2: #131c33;
+$sidebar-text: #94a3b8;
+$sidebar-active: #ffffff;
+
+$accent: #4f46e5;
+$accent-soft: #eef2ff;
+
+$st-pending: #d97706;
+$st-reserved: #2563eb;
+$st-successful: #059669;
+$st-released: #7c3aed;
+$st-failed: #dc2626;
+
+$radius: 14px;
+$radius-sm: 9px;
+$shadow-sm: 0 1px 2px rgba(15, 23, 42, .04), 0 1px 3px rgba(15, 23, 42, .06);
+$shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -8px rgba(15, 23, 42, .10);
+$shadow-lg: 0 24px 48px -12px rgba(15, 23, 42, .25);
+
+$sidebar-w: 248px;
+$sidebar-w-mini: 76px;
+$topbar-h: 64px;
+
+:root {
+  --c-accent: #{$accent};
+  --c-accent-soft: #{$accent-soft};
+  --c-text: #{$text};
+  --c-muted: #{$text-muted};
+  --c-border: #{$border};
+  --c-pending: #{$st-pending};
+  --c-reserved: #{$st-reserved};
+  --c-successful: #{$st-successful};
+  --c-released: #{$st-released};
+  --c-failed: #{$st-failed};
+}

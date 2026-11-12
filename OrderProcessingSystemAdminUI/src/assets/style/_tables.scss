@@ -1,0 +1,59 @@
+@use 'tokens' as *;
+
+.table-x {
+  width: 100%;
+  margin: 0;
+  font-size: .89rem;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: #f8fafc;
+    color: $text-muted;
+    font-weight: 600;
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    padding: 11px 16px;
+    border-bottom: 1px solid $border;
+    white-space: nowrap;
+    z-index: 1;
+  }
+  tbody td {
+    padding: 13px 16px;
+    border-bottom: 1px solid #eef1f6;
+    vertical-align: middle;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody tr { transition: background .12s ease; }
+  tbody tr.clickable { cursor: pointer; }
+  tbody tr.clickable:hover { background: #f8faff; }
+  tbody tr.flash { animation: row-flash 1.6s ease; }
+}
+@keyframes row-flash { 0% { background: #eef2ff; } 100% { background: transparent; } }
+
+.table-scroll { overflow-x: auto; }
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: .85rem;
+  color: $text-muted;
+  .pages { display: flex; gap: 4px; }
+  .pages button {
+    min-width: 34px; height: 34px;
+    border: 1px solid $border;
+    background: $surface;
+    border-radius: 8px;
+    font-weight: 500;
+    color: $text;
+    &:hover:not(:disabled) { border-color: #c7d2fe; color: $accent; }
+    &.active { background: $accent; border-color: $accent; color: #fff; }
+    &:disabled { opacity: .45; }
+  }
+}

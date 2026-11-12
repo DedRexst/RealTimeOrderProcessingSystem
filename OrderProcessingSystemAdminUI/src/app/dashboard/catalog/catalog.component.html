@@ -1,0 +1,64 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>Catalog</h1>
+      <p class="subtitle">Reference data from OrderService: products and customers that orders can use.</p>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn-soft btn-icon" (click)="load(true)"><i class="bi bi-arrow-clockwise"></i> Reload</button>
+      <button type="button" class="btn btn-primary btn-icon" *ngIf="auth.isAdmin()" (click)="addProduct()"><i class="bi bi-plus-lg"></i> Add product</button>
+    </div>
+  </div>
+
+  <div class="card-x">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 p-3 border-bottom">
+      <div class="segmented" role="tablist">
+        <button type="button" role="tab" [class.active]="tab === 'products'" (click)="tab = 'products'">
+          <i class="bi bi-box-seam"></i> Products <span class="chip">{{ products.length }}</span>
+        </button>
+        <button type="button" role="tab" [class.active]="tab === 'customers'" (click)="tab = 'customers'">
+          <i class="bi bi-people"></i> Customers <span class="chip">{{ customers.length }}</span>
+        </button>
+      </div>
+      <div class="position-relative">
+        <i class="bi bi-search position-absolute text-muted-x" style="left:10px;top:50%;transform:translateY(-50%);font-size:.85rem"></i>
+        <input type="search" class="form-control form-control-sm" style="padding-left:30px;width:240px"
+               placeholder="Search {{ tab }}" aria-label="Search" [value]="search" (input)="search = $any($event.target).value">
+      </div>
+    </div>
+
+    <div class="alert-x danger m-3" *ngIf="error"><i class="bi bi-exclamation-triangle"></i><span>{{ error }}</span></div>
+
+    <div class="table-scroll">
+      <table class="table-x" *ngIf="tab === 'products'">
+        <thead><tr><th style="width:90px">ID</th><th>Name</th><th>Description</th><th style="width:140px"></th></tr></thead>
+        <tbody>
+        <ng-container *ngIf="loading"><tr *ngFor="let _ of [1,2,3,4]"><td *ngFor="let __ of [1,2,3,4]"><span class="skeleton"></span></td></tr></ng-container>
+        <tr *ngFor="let p of filteredProducts">
+          <td class="mono fw-600">#{{ p.id }}</td>
+          <td class="fw-600">{{ p.name }}</td>
+          <td class="text-muted-x">{{ p.description || '—' }}</td>
+          <td></td>
+        </tr>
+        <tr *ngIf="!loading && !filteredProducts.length"><td colspan="4"><div class="empty-state"><i class="bi bi-box"></i><strong>No products</strong></div></td></tr>
+        </tbody>
+      </table>
+
+      <table class="table-x" *ngIf="tab === 'customers'">
+        <thead><tr><th style="width:90px">ID</th><th>Name</th><th>Address</th><th style="width:170px"></th></tr></thead>
+        <tbody>
+        <ng-container *ngIf="loading"><tr *ngFor="let _ of [1,2,3,4]"><td *ngFor="let __ of [1,2,3,4]"><span class="skeleton"></span></td></tr></ng-container>
+        <tr *ngFor="let c of filteredCustomers">
+          <td class="mono fw-600">#{{ c.id }}</td>
+          <td class="fw-600">{{ c.name }}</td>
+          <td class="text-muted-x">{{ c.address || '—' }}</td>
+          <td class="text-end">
+            <a class="btn btn-sm btn-soft" [routerLink]="['/orders']" [queryParams]="{customerId: c.id}"><i class="bi bi-receipt"></i> Orders</a>
+          </td>
+        </tr>
+        <tr *ngIf="!loading && !filteredCustomers.length"><td colspan="4"><div class="empty-state"><i class="bi bi-people"></i><strong>No customers</strong></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,125 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>Orders</h1>
+      <p class="subtitle">Browse, filter and manage orders. The list updates live as statuses change.</p>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn-soft btn-icon" (click)="refresh()" tooltip="Refresh" placement="bottom">
+        <i class="bi bi-arrow-clockwise"></i>
+      </button>
+      <button type="button" class="btn btn-primary btn-icon" (click)="openCreate()">
+        <i class="bi bi-plus-lg"></i> New order
+      </button>
+    </div>
+  </div>
+
+  <div class="card-x">
+    <div class="toolbar">
+      <div class="segmented" role="tablist" aria-label="Filter by status">
+        <button type="button" [class.active]="!query.status" (click)="setStatus(null)">All</button>
+        <button type="button" *ngFor="let s of statuses" [class.active]="query.status === s" (click)="setStatus(s)">
+          <span class="dot status-bg-{{ s.toLowerCase() }}"></span>{{ statusMeta(s).label }}
+        </button>
+      </div>
+      <div class="toolbar-right">
+        <div class="select-icon">
+          <i class="bi bi-person"></i>
+          <select class="form-select form-select-sm" aria-label="Filter by customer"
+                  [value]="query.customerId ?? ''" (change)="setCustomer($any($event.target).value)">
+            <option value="">All customers</option>
+            <option *ngFor="let c of customers$ | async" [value]="c.id" [selected]="c.id === query.customerId">{{ c.name }}</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-sm btn-link text-decoration-none" *ngIf="hasFilters" (click)="clearFilters()">
+          <i class="bi bi-x-circle"></i> Clear
+        </button>
+      </div>
+    </div>
+
+    <div class="alert-x danger m-3" *ngIf="error">
+      <i class="bi bi-exclamation-triangle"></i><span>{{ error }}</span>
+      <button type="button" class="btn btn-sm btn-link ms-auto p-0" (click)="refresh()">Retry</button>
+    </div>
+
+    <div class="table-scroll">
+      <table class="table-x">
+        <thead>
+        <tr>
+          <th style="width: 90px">Order</th>
+          <th>Customer</th>
+          <th>Products</th>
+          <th>Currency</th>
+          <th class="d-none d-xl-table-cell">Ship to</th>
+          <th>Status</th>
+          <th class="d-none d-lg-table-cell">Created</th>
+          <th class="d-none d-lg-table-cell">Updated</th>
+          <th style="width: 32px"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngIf="loading && !page">
+          <tr *ngFor="let _ of [1, 2, 3, 4, 5, 6]">
+            <td *ngFor="let __ of [1, 2, 3, 4, 5, 6, 7, 8, 9]"><span class="skeleton"></span></td>
+          </tr>
+        </ng-container>
+        <ng-container *ngIf="page">
+          <tr *ngFor="let o of page.content; trackBy: trackById" class="clickable" [class.flash]="flashed.has(o.id)"
+              (click)="open(o)" tabindex="0" (keydown.enter)="open(o)">
+            <td><span class="mono fw-600">#{{ o.id }}</span></td>
+            <td>
+              <div class="cust">
+                <span class="cust-avatar">{{ (o.customerName || '?').charAt(0) }}</span>
+                <span>{{ o.customerName || ('Customer #' + o.customerId) }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="chips" *ngIf="products$ | async as products">
+                <span class="chip" *ngFor="let pid of o.productIds | slice: 0 : 2">{{ pid | productName: products }}</span>
+                <span class="chip chip-accent" *ngIf="o.productIds.length > 2"
+                      [tooltip]="o.productIds.length - 2 + ' more'">+{{ o.productIds.length - 2 }}</span>
+              </div>
+            </td>
+            <td><span class="mono">{{ o.currency }}</span></td>
+            <td class="d-none d-xl-table-cell"><span class="addr" [title]="o.address">{{ o.address }}</span></td>
+            <td><app-status-badge [status]="o.status"></app-status-badge></td>
+            <td class="d-none d-lg-table-cell text-muted-x" [title]="o.createdTime | date: 'medium'">{{ o.createdTime | date: 'MMM d, HH:mm' }}</td>
+            <td class="d-none d-lg-table-cell text-muted-x" [title]="o.updatedTime | date: 'medium'">{{ o.updatedTime | timeAgo }}</td>
+            <td class="text-muted-x"><i class="bi bi-chevron-right"></i></td>
+          </tr>
+          <tr *ngIf="!page.content.length">
+            <td colspan="9">
+              <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <strong>No orders found</strong>
+                <small *ngIf="hasFilters">Try clearing the filters.</small>
+                <small *ngIf="!hasFilters">Create the first order to get the pipeline moving.</small>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-x__footer" *ngIf="page">
+      <div class="pager">
+        <div class="d-flex align-items-center gap-2">
+          <span>{{ rangeLabel }}</span>
+          <select class="form-select form-select-sm" style="width: auto" aria-label="Rows per page"
+                  (change)="setSize($any($event.target).value)">
+            <option *ngFor="let s of pageSizes" [value]="s" [selected]="s === query.size">{{ s }} / page</option>
+          </select>
+        </div>
+        <div class="pages" *ngIf="page.totalPages > 1">
+          <button type="button" aria-label="Previous page" [disabled]="query.page === 0" (click)="goTo(query.page - 1)"><i class="bi bi-chevron-left"></i></button>
+          <ng-container *ngFor="let p of pages">
+            <button type="button" *ngIf="p !== null" [class.active]="p === query.page" (click)="goTo(p)">{{ p + 1 }}</button>
+            <span *ngIf="p === null" class="px-1">…</span>
+          </ng-container>
+          <button type="button" aria-label="Next page" [disabled]="query.page >= page.totalPages - 1" (click)="goTo(query.page + 1)"><i class="bi bi-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<div class="page" *ngIf="vm$ | async as vm">
+  <div class="page-header">
+    <div>
+      <h1>Pipeline overview</h1>
+      <p class="subtitle">Real-time aggregates streamed from AnalyticsService (Kafka Streams).</p>
+    </div>
+    <div class="actions">
+      <a routerLink="/orders" class="btn btn-soft btn-icon"><i class="bi bi-receipt"></i> View orders</a>
+    </div>
+  </div>
+
+  <div class="alert-x warning mb-4" *ngIf="(socketStatus$ | async) === 'offline'">
+    <i class="bi bi-wifi-off"></i>
+    <span>The analytics stream is offline. Retrying automatically. Make sure AnalyticsService is running on port 8084.</span>
+  </div>
+
+  <app-kpi-tiles [state]="vm.state" [now]="vm.now"></app-kpi-tiles>
+
+  <div class="grid-12 mt-4">
+    <div class="span-8"><app-order-rate-chart [rates]="vm.state.orderRate" [now]="vm.now"></app-order-rate-chart></div>
+    <div class="span-4"><app-currency-chart [currencies]="vm.state.currencies"></app-currency-chart></div>
+
+    <div class="span-6"><app-status-funnel-chart [funnel]="vm.state.funnel"></app-status-funnel-chart></div>
+    <div class="span-6"><app-top-products [products]="vm.state.products" [catalog]="products$ | async"></app-top-products></div>
+
+    <div class="span-8"><app-transition-times [transitions]="vm.state.transitions"></app-transition-times></div>
+    <div class="span-4"><app-status-reasons [reasons]="vm.state.reasons"></app-status-reasons></div>
+
+    <div><app-live-feed [events]="vm.state.events"></app-live-feed></div>
+  </div>
+</div>

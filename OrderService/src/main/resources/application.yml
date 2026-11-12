@@ -1,0 +1,66 @@
+server:
+  port: 8082
+spring:
+  application.name: OrderService
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8085/.well-known/jwks.json
+          issuer-uri: http://localhost:8085
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      transaction-id-prefix: order-service-
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+        delivery.timeout.ms: 120000
+        spring.json.add.type.headers: false
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      group-id: order-service-inventory-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      max-poll-records: 50
+      properties:
+        spring.json.trusted.packages: com.project.orderservice.event
+        spring.json.value.default.type: com.project.orderservice.event.InventoryReservedEvent
+        isolation.level: read_committed
+    listener:
+      ack-mode: MANUAL
+      concurrency: 3
+      missing-topics-fatal: false
+
+security:
+  cors:
+    allowed-origins: http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173
+
+kafka:
+  topics:
+    orders-created: orders.created
+    inventory-reserved: inventory.reserved
+    orders-notifications: orders.notifications
+    orders-status-changed: orders.status-changed
+    orders-dlq: orders.dlq
+    products-created: products.created

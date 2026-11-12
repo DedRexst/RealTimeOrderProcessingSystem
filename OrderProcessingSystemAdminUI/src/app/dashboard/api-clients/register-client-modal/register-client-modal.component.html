@@ -1,0 +1,49 @@
+<div class="modal-header">
+  <h4 class="modal-title"><i class="bi bi-key me-2 text-primary"></i>Register API client</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="modalRef.hide()"></button>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <div class="modal-body">
+    <div class="alert-x danger mb-3" *ngIf="error"><i class="bi bi-exclamation-circle"></i><span>{{ error }}</span></div>
+
+    <div class="mb-3">
+      <label class="form-label" for="cname">Name</label>
+      <input id="cname" class="form-control" formControlName="name" placeholder="e.g. Nova Poshta carrier" [class.is-invalid]="invalid('name')">
+      <div class="invalid-feedback">{{ fieldErrors['name'] || 'Name is required (max 120 characters).' }}</div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="cdesc">Description <span class="text-muted-x fw-normal">(optional)</span></label>
+      <textarea id="cdesc" rows="2" class="form-control" formControlName="description" [class.is-invalid]="invalid('description')"></textarea>
+      <div class="invalid-feedback">{{ fieldErrors['description'] || 'Max 500 characters.' }}</div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="cemail">Contact email <span class="text-muted-x fw-normal">(optional)</span></label>
+      <input id="cemail" type="email" class="form-control" formControlName="contactEmail" placeholder="integrations@partner.com" [class.is-invalid]="invalid('contactEmail')">
+      <div class="invalid-feedback">{{ fieldErrors['contactEmail'] || 'Enter a valid email.' }}</div>
+    </div>
+
+    <label class="form-label" for="scope-input">Scopes</label>
+    <div class="form-control d-flex flex-wrap gap-1 align-items-center" [class.is-invalid]="scopeError" style="min-height: 42px">
+      <span class="chip chip-accent mono" *ngFor="let s of scopes">{{ s }}
+        <button type="button" (click)="removeScope(s)" [attr.aria-label]="'Remove ' + s"><i class="bi bi-x"></i></button>
+      </span>
+      <input id="scope-input" class="border-0 flex-grow-1" style="outline:none;min-width:120px;font-size:.88rem"
+             placeholder="Type a scope and press Enter" [value]="scopeInput"
+             (input)="scopeInput = $any($event.target).value" (keydown)="onScopeKey($event)" (blur)="addScope()">
+    </div>
+    <div class="invalid-feedback d-block" *ngIf="scopeError">{{ scopeError }}</div>
+    <div class="d-flex gap-1 flex-wrap mt-2 align-items-center">
+      <small class="text-muted-x me-1">Suggestions:</small>
+      <ng-container *ngFor="let s of suggested">
+        <button type="button" class="chip mono" style="cursor:pointer" *ngIf="!scopes.includes(s)" (click)="addScope(s)">+ {{ s }}</button>
+      </ng-container>
+    </div>
+    <div class="form-text mt-2"><span class="mono">orders:write</span> allows <span class="mono">POST /orders/&#123;id&#125;/status-callbacks</span>.</div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-soft" (click)="modalRef.hide()">Cancel</button>
+    <button type="submit" class="btn btn-primary" [disabled]="submitting">
+      <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2"></span>Register
+    </button>
+  </div>
+</form>

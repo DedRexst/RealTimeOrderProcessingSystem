@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/AuthService" name="AuthService">
+                <projects>
+                  <project path="$PROJECT_DIR$/AuthService" />
+                </projects>
+              </build>
+              <build path="$PROJECT_DIR$/OrderService" name="OrderService">
+                <projects>
+                  <project path="$PROJECT_DIR$/OrderService" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/AuthService" />
+            <option value="$PROJECT_DIR$/OrderService" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/AnalyticsService" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/AnalyticsService" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/AuthService" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/AuthService" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/InventoryService" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/InventoryService" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/NotificationService" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/NotificationService" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/OrderService" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/OrderService" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

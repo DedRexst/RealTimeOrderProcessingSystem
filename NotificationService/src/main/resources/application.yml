@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: NotificationService
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: notification-service-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.project.notificationservice.event
+        spring.json.value.default.type: com.project.notificationservice.event.OrderNotificationEvent
+        isolation.level: read_committed
+    listener:
+      ack-mode: MANUAL
+      missing-topics-fatal: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+      mail.smtp.connectiontimeout: 10000
+      mail.smtp.timeout: 10000
+      mail.smtp.writetimeout: 10000
+
+kafka:
+  topics:
+    orders-notifications: orders.notifications
+
+notification:
+  mail:
+    from: ${MAIL_USERNAME}

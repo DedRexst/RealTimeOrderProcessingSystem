@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <h4 class="modal-title"><i class="bi bi-box-seam me-2 text-primary"></i>Add product</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="modalRef.hide()"></button>
+</div>
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <div class="modal-body">
+    <div class="alert-x danger mb-3" *ngIf="error"><i class="bi bi-exclamation-circle"></i><span>{{ error }}</span></div>
+
+    <div class="mb-3">
+      <label class="form-label" for="pname">Name</label>
+      <input id="pname" class="form-control" formControlName="name" placeholder="e.g. Wireless mouse" [class.is-invalid]="invalid('name')">
+      <div class="invalid-feedback">{{ fieldErrors['name'] || 'Name is required (max 255 characters).' }}</div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="pdesc">Description <span class="text-muted-x fw-normal">(optional)</span></label>
+      <textarea id="pdesc" rows="2" class="form-control" formControlName="description" [class.is-invalid]="invalid('description')"></textarea>
+      <div class="invalid-feedback">{{ fieldErrors['description'] || 'Max 255 characters.' }}</div>
+    </div>
+    <div class="mb-1">
+      <label class="form-label" for="pstock">Initial stock</label>
+      <input id="pstock" type="number" min="0" step="1" class="form-control" style="max-width:160px"
+             formControlName="initialStock" [class.is-invalid]="invalid('initialStock')">
+      <div class="invalid-feedback">{{ fieldErrors['initialStock'] || 'A whole number, 0 or more.' }}</div>
+    </div>
+    <div class="form-text">Sent to InventoryService, which creates the stock record a moment after the product is saved.</div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-soft" (click)="modalRef.hide()">Cancel</button>
+    <button type="submit" class="btn btn-primary" [disabled]="submitting">
+      <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2"></span>Add product
+    </button>
+  </div>
+</form>
